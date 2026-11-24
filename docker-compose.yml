@@ -1,0 +1,21 @@
+name: sibsomsserver
+
+services:
+  web:
+    container_name: SiBS-OMS-Server
+    init: true
+    stop_grace_period: 20s
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "${OMS_SERVER_PORT:-6103}:6103"
+    env_file:
+      - ${SERVER_ENV_FILE:-.env}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    environment:
+      NODE_ENV: production
+      PORT: 6103
+      TRUST_PROXY: "1"
+    restart: unless-stopped
